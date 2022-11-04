@@ -63,7 +63,7 @@ if __name__ == '__main__':
         img_file_name = 'temp_meme.jpg'
         with open(img_file_name, 'wb') as handler:
             handler.write(img_data)
-        ls_words = [i.lower() for i in meme_name["name"].split(" ")] + text_list
+        ls_words = [i.lower() for i in meme_name.split(" ")] + text_list
         sentence = RandomSentence(nouns=ls_words)
         img = Image.open(img_file_name)
         st.write(sentence.sentence())

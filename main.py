@@ -1,7 +1,7 @@
+import pandas as pd
 import requests as re
 import json
 from time import sleep
-from random import randint
 from wonderwords import RandomSentence
 from PIL import Image
 import streamlit as st
@@ -32,10 +32,22 @@ class MemeHunter:
             if fn_iter == fn_iter_max:
                 raise Exception("Connection timeout exceeded")
 
-    def get_random_meme(self, fn_iter_max):
+    def get_meme(self, fn_iter_max, fn_text_list):
         fn_memes = self.return_memes(fn_iter_max=fn_iter_max)
-        fn_meme = fn_memes[randint(0, len(fn_memes) - 1)]
-        return fn_meme
+        df_memes = pd.DataFrame(fn_memes)
+        fn_ls = []
+        for row in df_memes.iterrows():
+            score = 0
+            for tx in fn_text_list:
+                for w in row[1]["name"].split(" "):
+                    if tx.lower() == w.lower():
+                        print(tx, w)
+                        score+=1
+            fn_ls.append(score)
+        df_memes = df_memes.assign(score=fn_ls).sort_values("score", ascending=False)
+        meme_link = df_memes["url"].iloc[0]
+        meme_name = df_memes["name"].iloc[0]
+        return meme_link, meme_name
 
 
 if __name__ == '__main__':
@@ -45,12 +57,13 @@ if __name__ == '__main__':
     if gen_button:
         url = "https://api.imgflip.com/get_memes"
         M = MemeHunter(api_url=url)
-        meme = M.get_random_meme(fn_iter_max=5)
-        img_data = re.get(meme["url"]).content
+        text_list = [i.lower() for i in text_input.split(" ")]
+        meme_link, meme_name = M.get_meme(fn_iter_max=5, fn_text_list=text_list)
+        img_data = re.get(meme_link).content
         img_file_name = 'temp_meme.jpg'
         with open(img_file_name, 'wb') as handler:
             handler.write(img_data)
-        ls_words = [i.lower() for i in meme["name"].split(" ")] + [i.lower() for i in text_input.split(" ")]
+        ls_words = [i.lower() for i in meme_name["name"].split(" ")] + text_list
         sentence = RandomSentence(nouns=ls_words)
         img = Image.open(img_file_name)
         st.write(sentence.sentence())

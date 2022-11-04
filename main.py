@@ -34,7 +34,7 @@ class MemeHunter:
 
     def get_meme(self, fn_iter_max, fn_text_list):
         fn_memes = self.return_memes(fn_iter_max=fn_iter_max)
-        df_memes = pd.DataFrame(fn_memes)
+        df_memes = pd.DataFrame(fn_memes).sample(frac=1)
         fn_ls = []
         for row in df_memes.iterrows():
             score = 0

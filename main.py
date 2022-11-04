@@ -41,6 +41,7 @@ class MemeHunter:
 if __name__ == '__main__':
     st.header("Luke's cool meme generator")
     gen_button = st.button("GENERATE MEME")
+    text_input = st.text_input(label="input some words")
     if gen_button:
         url = "https://api.imgflip.com/get_memes"
         M = MemeHunter(api_url=url)
@@ -49,7 +50,8 @@ if __name__ == '__main__':
         img_file_name = 'temp_meme.jpg'
         with open(img_file_name, 'wb') as handler:
             handler.write(img_data)
-        sentence = RandomSentence(nouns=[i.lower() for i in meme["name"].split(" ")])
+        ls_words = [i.lower() for i in meme["name"].split(" ")] + [i.lower() for i in text_input]
+        sentence = RandomSentence(nouns=ls_words)
         img = Image.open(img_file_name)
         st.write(sentence.sentence())
         st.image(img, caption="meme")

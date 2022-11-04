@@ -51,8 +51,8 @@ class MemeHunter:
 
 
 if __name__ == '__main__':
-    st.header("Luke's cool meme generator")
-    gen_button = st.button("GENERATE MEME")
+    st.header("Luke's oracle of wisdom")
+    gen_button = st.button("GENERATE WISDOM")
     text_input = st.text_input(label="input some words")
     if gen_button:
         url = "https://api.imgflip.com/get_memes"

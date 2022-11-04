@@ -50,7 +50,7 @@ if __name__ == '__main__':
         img_file_name = 'temp_meme.jpg'
         with open(img_file_name, 'wb') as handler:
             handler.write(img_data)
-        ls_words = [i.lower() for i in meme["name"].split(" ")] + [i.lower() for i in text_input]
+        ls_words = [i.lower() for i in meme["name"].split(" ")] + [i.lower() for i in text_input.split(" ")]
         sentence = RandomSentence(nouns=ls_words)
         img = Image.open(img_file_name)
         st.write(sentence.sentence())

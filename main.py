@@ -6,6 +6,10 @@ from wonderwords import RandomSentence
 from PIL import Image
 import streamlit as st
 
+d_auth = {
+    "luke": "123",
+    "ppp": "222"
+}
 
 class MemeHunter:
 
@@ -42,7 +46,7 @@ class MemeHunter:
                 for w in row[1]["name"].split(" "):
                     if tx.lower() == w.lower():
                         print(tx, w)
-                        score+=1
+                        score += 1
             fn_ls.append(score)
         df_memes = df_memes.assign(score=fn_ls).sort_values("score", ascending=False)
         meme_link = df_memes["url"].iloc[0]
@@ -54,17 +58,26 @@ if __name__ == '__main__':
     st.header("Luke's oracle of wisdom")
     gen_button = st.button("GENERATE WISDOM")
     text_input = st.text_input(label="input some words")
+    user = st.text_input(label="username")
+    password = st.text_input(label="password")
     if gen_button:
-        url = "https://api.imgflip.com/get_memes"
-        M = MemeHunter(api_url=url)
-        text_list = [i.lower() for i in text_input.split(" ")]
-        meme_link, meme_name = M.get_meme(fn_iter_max=5, fn_text_list=text_list)
-        img_data = re.get(meme_link).content
-        img_file_name = 'temp_meme.jpg'
-        with open(img_file_name, 'wb') as handler:
-            handler.write(img_data)
-        ls_words = [i.lower() for i in meme_name.split(" ")] + text_list
-        sentence = RandomSentence(nouns=ls_words)
-        img = Image.open(img_file_name)
-        st.write(sentence.sentence())
-        st.image(img, caption="meme")
+        if user in list(d_auth.keys()):
+            if password == d_auth[user]:
+                url = "https://api.imgflip.com/get_memes"
+                M = MemeHunter(api_url=url)
+                text_list = [i.lower() for i in text_input.split(" ")]
+                meme_link, meme_name = M.get_meme(fn_iter_max=5, fn_text_list=text_list)
+                img_data = re.get(meme_link).content
+                img_file_name = 'temp_meme.jpg'
+                with open(img_file_name, 'wb') as handler:
+                    handler.write(img_data)
+                ls_words = [i.lower() for i in meme_name.split(" ")] + text_list
+                sentence = RandomSentence(nouns=ls_words)
+                img = Image.open(img_file_name)
+                st.write(sentence.sentence())
+                st.image(img, caption="meme")
+            else:
+                st.write("Password incorrect")
+        else:
+            st.write("Username does not exist")
+

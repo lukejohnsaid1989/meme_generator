@@ -4,13 +4,23 @@ from streamlit_player import st_player
 
 header = st.header("MALTA MEME ARCHIVE")
 
-with st.sidebar:
-    zqc_button = st.button(label="ĦA NARAH")
-    frt_button = st.button(label="AVUKATI PERITI")
-    hms_button = st.button(label="UX ĦAMSA")
-    potato_button = st.button(label="MY LIVE IS POTATO")
-    presente_button = st.button(label="PRESENTE")
-    ps_ps_button = st.button(label="PSPSPSPS")
+with st.container():
+    col1_a, col2_a, col3_a = st.columns(3)
+    with col1_a:
+        zqc_button = st.button(label="ĦA NARAH")
+    with col2_a:
+        frt_button = st.button(label="AVUKATI PERITI")
+    with col3_a:
+        hms_button = st.button(label="UX ĦAMSA")
+
+with st.container():
+    col1_b, col2_b, col3_b = st.columns(3)
+    with col1_b:
+        potato_button = st.button(label="MY LIVE IS POTATO")
+    with col2_b:
+        presente_button = st.button(label="PRESENTE")
+    with col3_b:
+        ps_ps_button = st.button(label="PSPSPSPS")
 
 
 if zqc_button:
